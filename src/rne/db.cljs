@@ -20,7 +20,7 @@
   (s/keys :req-un [::greeting] :req [:nav/tab-state]))
 
 ;; initial state of app-db
-(def app-db {:greeting "Hello Clojurescript in Expo!"
+(def app-db {:greeting "Hi Cljs in Expo!"
              :page 0
              :nav/tab-state   #:nav.state{:index  0
                                           :routes [#:nav.route{:key :IndexKey :routeName :Index}

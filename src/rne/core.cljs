@@ -17,7 +17,20 @@
 (def button (r/adapt-react-class (.-Button ReactNative)))
 (def flat-list (r/adapt-react-class (.-FlatList ReactNative)))
 (def scroll-view (r/adapt-react-class (.-ScrollView ReactNative)))
-(def status-bar (r/adapt-react-class (.-StatusBar ReactNative)))
+
+
+(def NativeModules (.-NativeModules ReactNative))
+(def StatusBar (r/adapt-react-class (.-StatusBar ReactNative)))
+(def status-bar (r/adapt-react-class StatusBar))
+
+(defn hide-statusbar
+  []
+  (.setHidden StatusBar true "fade"))
+
+(defn show-statusbar
+  []
+  (.setHidden StatusBar false "fade"))
+
 
 (def ToolbarAndroid (js/require "ToolbarAndroid"))
 (def toolbar (r/adapt-react-class (.-ToolbarAndroid ReactNative)))
@@ -137,10 +150,11 @@
                    [picker-item {:label "p2" :value "p2"}]]]
     [view
      [text "Here be examples"]
-     [text "sss"]
 
      [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} @greeting]
+
      [activity-indicator {:size :large :color :green}]
+
      [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
                            :on-press
                            #(dispatch [:nav/navigate
@@ -150,30 +164,32 @@
                                         "Index"]])}
 
       [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "press me"]]
+
      [input {:value textVal :on-change-text #(alert (str "entered=" %)) :placeholder "type something"}]
+
      [button {:title "clicky" :on-press #(alert "clickied")}]
 
      [text "picker"]
      [picker ]
+
      [text "scroll-view"]
      [scroll-view {:data [{:name "aaa" :idx 0 :key :a}
+                          {:name "bbb" :idx 1 :key :b}
+                          {:name "ccc" :idx 2 :key :c}]
+                   :render-item (fn [x] [view  [text (:name x)]])
+                   :style {:height 15 :width 100}
+                   :removeClippedSubviews false}]
+
+     [text "flat-list"]
+     [flat-list {:data [{:name "aaa" :idx 0 :key :a}
                         {:name "bbb" :idx 1 :key :b}
                         {:name "ccc" :idx 2 :key :c}]
                  :render-item (fn [x] (r/reactify-component [view  [text (:name x)]]))
                  :style {:height 15 :width 100 :color :red}
-                 :removeClippedSubviews false
-
-                   }]
-     [text "flat-list"]
-     [flat-list {:data [{:name "aaa" :idx 0 :key :a}
-                                               {:name "bbb" :idx 1 :key :b}
-                                               {:name "ccc" :idx 2 :key :c}]
-                                        :render-item (fn [x] (r/reactify-component [view  [text (:name x)]]))
-                                        :style {:height 15 :width 100 :color :red}
-                                        :removeClippedSubviews false
-
-                                        }]
-
+                 :removeClippedSubviews false}]
+     (comment  [status-bar {:hidden false :background-color :yellow
+                            ;;:bar-style {:style "light-content"}
+                            }])
      ]))
 
 (defn app-root []
@@ -184,7 +200,7 @@
       [view {:style {:flex-direction "column" :margin 25 :align-items "center"}}
 
 
-       ;;[status-bar {:hidden false :background-color :yellow :bar-style {:style "light-content"}}]
+       ;;
 ;;       [stackNav {[text "s-one"] {:screen [view [text "abc"]]}
 ;;                  [text "s-two"] {:screen [view [text "def"]]}}]
 

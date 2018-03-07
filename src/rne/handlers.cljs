@@ -4,6 +4,16 @@
     [clojure.spec.alpha :as s]
     [rne.db :as db :refer [app-db]]))
 
+;; -- Helpers
+;; ------------------------------------------------------------
+
+(defn dec-to-zero
+  "Same as dec if not zero"
+  [arg]
+  (if (< 0 arg)
+    (dec arg)
+    arg))
+
 ;; -- Interceptors ----------------------------------------------------------
 ;;
 ;; See https://github.com/Day8/re-frame/blob/develop/docs/Interceptors.md
